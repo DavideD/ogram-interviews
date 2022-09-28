@@ -1,4 +1,4 @@
-package co.ogram
+package co.ogram.domain.question
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
@@ -6,7 +6,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection
 
 @JsonRootName("question")
 @RegisterForReflection
-data class QuestionResponse(
+internal data class QuestionResponse(
     @field:JsonProperty("question_id")
     val questionId: Long?,
 

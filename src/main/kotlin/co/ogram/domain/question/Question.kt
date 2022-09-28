@@ -1,4 +1,4 @@
-package co.ogram
+package co.ogram.domain.question
 
 import io.quarkus.runtime.annotations.RegisterForReflection
 import javax.persistence.Entity
@@ -9,9 +9,11 @@ import javax.persistence.Column
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
-@Entity(name = "question")
+import co.ogram.infrastructure.database.Table.QUESTION_TABLE
+
+@Entity(name = QUESTION_TABLE)
 @RegisterForReflection
-data class Question constructor(
+internal data class Question constructor(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @field:Column(name = "id")

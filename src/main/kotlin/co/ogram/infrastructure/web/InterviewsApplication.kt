@@ -1,8 +1,8 @@
-package co.ogram
+package co.ogram.infrastructure.web
 
 import javax.ws.rs.ApplicationPath
 import javax.ws.rs.core.Application
 
 @ApplicationPath("/api")
-class InterviewsApplication : Application() {
+internal class InterviewsApplication : Application() {
 }

@@ -1,15 +1,17 @@
-package co.ogram
+package co.ogram.domain.interview
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.Table
 import javax.persistence.Column
+import io.quarkus.runtime.annotations.RegisterForReflection
 
-@Entity
-@Table(name = "interview")
-data class Interview (
+import co.ogram.infrastructure.database.Table.INTERVIEW_TABLE
+
+@Entity(name = INTERVIEW_TABLE)
+@RegisterForReflection
+internal data class Interview (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

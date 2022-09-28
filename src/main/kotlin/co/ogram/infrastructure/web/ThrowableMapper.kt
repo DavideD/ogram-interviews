@@ -1,11 +1,12 @@
-package co.ogram
+package co.ogram.infrastructure.web
 
+import co.ogram.infrastructure.web.ErrorResponse
 import javax.ws.rs.core.Response
 import javax.ws.rs.ext.ExceptionMapper
 import javax.ws.rs.ext.Provider
 
 @Provider
-class ThrowableMapper : ExceptionMapper<Throwable> {
+internal class ThrowableMapper : ExceptionMapper<Throwable> {
     override fun toResponse(exception: Throwable?): Response {
         val defaultMessage = "Internal Server Error"
         val errorMessage = exception?.message ?: defaultMessage

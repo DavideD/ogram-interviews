@@ -1,4 +1,4 @@
-package co.ogram
+package co.ogram.domain.question
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
@@ -10,7 +10,7 @@ import javax.validation.constraints.Positive
 
 @JsonRootName("question")
 @RegisterForReflection
-data class QuestionCreateRequest(
+internal data class QuestionCreateRequest(
     @field:JsonProperty("work_category_id")
     val workCategoryId: Long? = null,
 

@@ -1,4 +1,4 @@
-package co.ogram
+package co.ogram.infrastructure.web
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
@@ -6,7 +6,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection
 
 @JsonRootName("error")
 @RegisterForReflection
-data class ErrorResponse(
+internal data class ErrorResponse(
     @field:JsonProperty("message")
     val message: String,
 

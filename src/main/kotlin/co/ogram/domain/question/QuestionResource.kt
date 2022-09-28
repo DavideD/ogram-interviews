@@ -1,4 +1,4 @@
-package co.ogram
+package co.ogram.domain.question
 
 import javax.ws.rs.GET
 import javax.ws.rs.POST
@@ -15,7 +15,7 @@ import javax.ws.rs.PathParam
 import javax.ws.rs.core.Response
 
 @Path("/interviews")
-class QuestionResource {
+internal class QuestionResource {
     @Inject @field:Default lateinit var questionService: QuestionService
 
     @GET
@@ -24,13 +24,7 @@ class QuestionResource {
     fun getQuestions(@PathParam("interviewId") interviewId: Long, @PathParam("questionId") questionId: Long): Uni<Response> {
         return this.questionService
             .get(questionId)
-            .map {
-                if (it == null) {
-                    Response.status(Response.Status.NOT_FOUND).build()
-                } else {
-                    Response.ok().status(Response.Status.OK).entity(it).build()
-                }
-            }
+            .map { Response.ok().status(Response.Status.OK).entity(it).build() }
     }
 
     @POST

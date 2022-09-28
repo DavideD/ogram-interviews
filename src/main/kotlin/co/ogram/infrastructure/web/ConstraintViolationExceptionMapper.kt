@@ -1,4 +1,4 @@
-package co.ogram
+package co.ogram.infrastructure.web
 
 import javax.validation.ConstraintViolationException
 import javax.ws.rs.core.Response
@@ -8,7 +8,7 @@ import javax.ws.rs.ext.Provider
 val camelRegex = "(?<=[a-zA-Z])[A-Z]".toRegex()
 
 @Provider
-class ConstraintViolationExceptionMapper : ExceptionMapper<ConstraintViolationException> {
+internal class ConstraintViolationExceptionMapper : ExceptionMapper<ConstraintViolationException> {
     override fun toResponse(exception: ConstraintViolationException?): Response {
         val errorMessages = mutableMapOf<String, String>()
         exception?.constraintViolations?.forEach {

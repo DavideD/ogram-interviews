@@ -24,7 +24,7 @@ internal class QuestionResource {
     fun getQuestions(@PathParam("interviewId") interviewId: Long, @PathParam("questionId") questionId: Long): Uni<Response> {
         return this.questionService
             .get(questionId)
-            .map { Response.ok().status(Response.Status.OK).entity(it).build() }
+            .map { Response.ok().entity(it).build() }
     }
 
     @POST
@@ -33,7 +33,7 @@ internal class QuestionResource {
     @Path("/questions")
     fun createQuestion(@Valid @NotNull(message = "Question's data is required") question: QuestionCreateRequest): Uni<Response> {
         return this.questionService.create(question).map {
-            Response.ok().status(Response.Status.CREATED).entity(it).build()
+            Response.status(Response.Status.CREATED).entity(it).build()
         }
     }
 }

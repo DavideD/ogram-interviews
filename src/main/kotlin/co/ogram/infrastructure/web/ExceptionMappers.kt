@@ -5,7 +5,6 @@ import org.jboss.resteasy.reactive.RestResponse
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper
 import javax.ws.rs.core.Response
 
-
 internal class ExceptionMappers {
     @ServerExceptionMapper
     fun mapException(x: QuestionNotFoundException): RestResponse<ErrorResponse> {

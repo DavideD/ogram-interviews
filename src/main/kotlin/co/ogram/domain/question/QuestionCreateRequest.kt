@@ -32,6 +32,5 @@ internal data class QuestionCreateRequest(
         description = description as String,
         clientId = clientId,
         maxTime = maxTime as Short,
-        answers = mutableListOf(),
     )
 }

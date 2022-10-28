@@ -18,9 +18,6 @@ internal data class QuestionResponse(
 
     @field:JsonProperty("max_time")
     val maxTime: Short,
-
-    @field:JsonProperty("client_id")
-    val clientId: Long? = null
 ) {
     companion object {
         @JvmStatic
@@ -29,7 +26,6 @@ internal data class QuestionResponse(
             workCategoryId = question.workCategoryId,
             description = question.description,
             maxTime = question.maxTime,
-            clientId = question.clientId,
         )
     }
 }

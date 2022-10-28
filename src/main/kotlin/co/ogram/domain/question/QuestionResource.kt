@@ -30,9 +30,15 @@ internal class QuestionResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Operation(summary = "creates a question in the database")
-    @Path("/questions")
-    fun createQuestion(@Valid @NotNull(message = "Question's data is required") question: QuestionCreateRequest): Uni<Response> {
-        return this.questionService.create(question).map {
+    @Path("/{interviewId}/questions")
+    fun createQuestion(
+        @PathParam("interviewId")
+        interviewId: Long,
+        @Valid
+        @NotNull(message = "Question's data is required")
+        question: QuestionCreateRequest
+    ): Uni<Response> {
+        return this.questionService.create(question, interviewId).map {
             Response.status(Response.Status.CREATED).entity(it).build()
         }
     }

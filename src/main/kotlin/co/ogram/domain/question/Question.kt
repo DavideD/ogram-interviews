@@ -3,12 +3,14 @@ package co.ogram.domain.question
 import io.quarkus.runtime.annotations.RegisterForReflection
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
-
-import co.ogram.infrastructure.database.Table.QUESTION_TABLE
-import co.ogram.domain.answer.Answer
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction.CASCADE
 import javax.persistence.*
+
+import co.ogram.infrastructure.database.Table.QUESTION_TABLE
+import co.ogram.infrastructure.database.Table.INTERVIEW_QUESTION_TABLE
+import co.ogram.domain.answer.Answer
+import co.ogram.domain.interview.Interview
 
 @Entity(name = QUESTION_TABLE)
 @RegisterForReflection
@@ -29,4 +31,11 @@ internal data class Question (
         @field:OneToMany(mappedBy = "question")
         @field:OnDelete(action = CASCADE)
         val answers: MutableList<Answer>? = mutableListOf(),
+        @field:ManyToMany(cascade = [CascadeType.ALL])
+        @field:JoinTable(
+                name = INTERVIEW_QUESTION_TABLE,
+                joinColumns = [JoinColumn(name = "question_id", referencedColumnName = "id")],
+                inverseJoinColumns = [JoinColumn(name = "interview_id", referencedColumnName = "id")]
+        )
+        val interviews: MutableList<Interview>? = mutableListOf(),
 )

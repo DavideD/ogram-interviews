@@ -7,12 +7,14 @@ import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import io.smallrye.mutiny.Uni
 import javax.enterprise.inject.Default
 import javax.inject.Inject
-import org.eclipse.microprofile.openapi.annotations.Operation
+import javax.annotation.security.RolesAllowed
+import javax.annotation.security.PermitAll
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 import javax.ws.rs.Consumes
 import javax.ws.rs.PathParam
 import javax.ws.rs.core.Response
+import org.eclipse.microprofile.openapi.annotations.Operation
 
 @Path("/interviews")
 internal class QuestionResource {
@@ -20,6 +22,7 @@ internal class QuestionResource {
 
     @GET
     @Operation(summary = "returns question from the database")
+    @PermitAll
     @Path("/{interviewId}/questions/{questionId}")
     fun getQuestions(@PathParam("interviewId") interviewId: Long, @PathParam("questionId") questionId: Long): Uni<Response> {
         return this.questionService
@@ -30,6 +33,7 @@ internal class QuestionResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Operation(summary = "creates a question in the database")
+    @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
     @Path("/{interviewId}/questions")
     fun createQuestion(
         @PathParam("interviewId")

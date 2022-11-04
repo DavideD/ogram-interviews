@@ -12,9 +12,9 @@ internal class AnswerService {
     @Inject @field:Default lateinit var answerRepository: AnswerRepository
     @Inject @field:Default lateinit var questionService: QuestionService
 
-    fun create(createRequest: AnswerCreateRequest): Uni<AnswerResponse> {
+    fun create(createRequest: AnswerCreateRequest, spId: Long): Uni<AnswerResponse> {
          createRequest
-            .toEntity(fileURL = "http://www.a-url.com/mock")
+            .toEntity(spId, fileURL = "http://www.a-url.com/mock")
             .run {
                 return questionService
                     .get(this.questionId)

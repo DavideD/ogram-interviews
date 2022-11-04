@@ -26,8 +26,8 @@ internal class InterviewService {
             }
     }
 
-    fun create(createRequest: InterviewCreateRequest): Uni<InterviewResponse> = createRequest
-        .toEntity()
+    fun create(createRequest: InterviewCreateRequest, clientId: Long): Uni<InterviewResponse> = createRequest
+        .toEntity(clientId)
         .run {
             interviewRepository.persistInterview(this).map {
                 InterviewResponse.build((it))

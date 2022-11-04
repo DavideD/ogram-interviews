@@ -23,11 +23,8 @@ internal data class QuestionCreateRequest(
     @field:Positive(message = "Time limit should be at least 1 second")
     @field:Max(600, message = "Time limit should not exceed 10 minutes")
     val maxTime: Short?,
-
-    @field:JsonProperty("client_id")
-    val clientId: Long? = null,
 ) {
-    fun toEntity() = Question(
+    fun toEntity(clientId: Long?) = Question(
         workCategoryId = workCategoryId,
         description = description as String,
         clientId = clientId,

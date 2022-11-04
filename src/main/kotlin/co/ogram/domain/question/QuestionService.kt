@@ -22,8 +22,8 @@ internal class QuestionService {
             }
         }
 
-    fun create(createRequest: QuestionCreateRequest, interviewId: Long): Uni<QuestionResponse> = createRequest
-        .toEntity()
+    fun create(createRequest: QuestionCreateRequest, interviewId: Long, clientId: Long?): Uni<QuestionResponse> = createRequest
+        .toEntity(clientId)
         .run {
             interviewService
                 .addQuestion(interviewId, this)

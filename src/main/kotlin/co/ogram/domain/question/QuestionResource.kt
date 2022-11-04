@@ -15,6 +15,8 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.PathParam
 import javax.ws.rs.core.Response
 import org.eclipse.microprofile.openapi.annotations.Operation
+import javax.ws.rs.core.Context
+import javax.ws.rs.core.SecurityContext
 
 @Path("/interviews")
 internal class QuestionResource {
@@ -32,17 +34,16 @@ internal class QuestionResource {
 
     @POST
     @Consumes(APPLICATION_JSON)
-    @Operation(summary = "creates a question in the database")
+    @Operation(summary = "creates a question in the database for given interview")
     @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
     @Path("/{interviewId}/questions")
     fun createQuestion(
-        @PathParam("interviewId")
-        interviewId: Long,
-        @Valid
-        @NotNull(message = "Question's data is required")
-        question: QuestionCreateRequest
+        @PathParam("interviewId") interviewId: Long,
+        @Valid @NotNull(message = "Question's data is required") question: QuestionCreateRequest,
+        @Context sec: SecurityContext,
     ): Uni<Response> {
-        return this.questionService.create(question, interviewId).map {
+        val clientId = sec.userPrincipal.name.toLong()
+        return this.questionService.create(question, interviewId, clientId).map {
             Response.status(Response.Status.CREATED).entity(it).build()
         }
     }

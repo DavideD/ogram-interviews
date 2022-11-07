@@ -18,25 +18,37 @@ import org.eclipse.microprofile.openapi.annotations.Operation
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.SecurityContext
 
-@Path("/interviews")
+@Path("/questions")
 internal class QuestionResource {
     @Inject @field:Default lateinit var questionService: QuestionService
 
     @GET
     @Operation(summary = "returns question from the database")
     @PermitAll
-    @Path("/{interviewId}/questions/{questionId}")
-    fun getQuestions(@PathParam("interviewId") interviewId: Long, @PathParam("questionId") questionId: Long): Uni<Response> {
+    @Path("/{questionId}")
+    fun getQuestion(@PathParam("questionId") questionId: Long): Uni<Response> {
         return this.questionService
             .get(questionId)
-            .map { Response.ok().entity(it).build() }
+            .map { Response.ok().entity(QuestionResponse.build(it)).build() }
     }
 
     @POST
     @Consumes(APPLICATION_JSON)
-    @Operation(summary = "creates a question in the database for given interview")
+    @Operation(summary = "creates a question in the database")
     @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
-    @Path("/{interviewId}/questions")
+    fun createQuestion(
+        @Valid @NotNull(message = "Question's data is required") question: QuestionCreateRequest,
+    ): Uni<Response> {
+        return this.questionService.create(question).map {
+            Response.status(Response.Status.CREATED).entity(QuestionResponse.build(it)).build()
+        }
+    }
+
+    @POST
+    @Consumes(APPLICATION_JSON)
+    @Operation(summary = "creates a question in the database for given interview and client")
+    @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
+    @Path("/{interviewId}")
     fun createQuestion(
         @PathParam("interviewId") interviewId: Long,
         @Valid @NotNull(message = "Question's data is required") question: QuestionCreateRequest,
@@ -44,7 +56,7 @@ internal class QuestionResource {
     ): Uni<Response> {
         val clientId = sec.userPrincipal.name.toLong()
         return this.questionService.create(question, interviewId, clientId).map {
-            Response.status(Response.Status.CREATED).entity(it).build()
+            Response.status(Response.Status.CREATED).entity(QuestionResponse.build(it)).build()
         }
     }
 }

@@ -6,7 +6,6 @@ import javax.enterprise.inject.Default
 import javax.inject.Inject
 
 import co.ogram.domain.question.Question
-import co.ogram.domain.exception.InterviewNotFoundException
 
 @ApplicationScoped
 internal class InterviewService {
@@ -14,23 +13,25 @@ internal class InterviewService {
 
     fun addQuestion(interviewId: Long, question: Question): Uni<Interview> {
         return interviewRepository
-            .findById(interviewId)
+            .getInterview(interviewId)
             .map {
-                if (it == null) {
-                    throw InterviewNotFoundException("Interview with id $interviewId not found")
-                } else {
-                    it.questions.add(question)
-                    interviewRepository.persistInterview(it)
-                    it
-                }
+                it.questions.add(question)
+                interviewRepository.persistInterview(it)
+                it
             }
     }
 
-    fun create(createRequest: InterviewCreateRequest, clientId: Long): Uni<InterviewResponse> = createRequest
+    fun getInterview(interviewId: Long): Uni<Interview> {
+        return interviewRepository.getInterview(interviewId)
+    }
+
+    fun getQuestions(interviewId: Long): Uni<MutableSet<Question>> {
+        return interviewRepository.getInterviewQuestions(interviewId)
+    }
+
+    fun create(createRequest: InterviewCreateRequest, clientId: Long): Uni<Interview> = createRequest
         .toEntity(clientId)
         .run {
-            interviewRepository.persistInterview(this).map {
-                InterviewResponse.build((it))
-            }
+            interviewRepository.persistInterview(this)
         }
 }

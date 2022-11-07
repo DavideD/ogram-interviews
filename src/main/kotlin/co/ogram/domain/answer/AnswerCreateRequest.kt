@@ -1,5 +1,6 @@
 package co.ogram.domain.answer
 
+import co.ogram.domain.question.Question
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
 import io.quarkus.runtime.annotations.RegisterForReflection

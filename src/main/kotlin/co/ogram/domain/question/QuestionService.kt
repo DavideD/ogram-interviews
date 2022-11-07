@@ -1,6 +1,6 @@
 package co.ogram.domain.question
 
-import co.ogram.domain.exception.QuestionNotFoundException
+import co.ogram.domain.answer.Answer
 import co.ogram.domain.interview.InterviewService
 import io.smallrye.mutiny.Uni
 import javax.enterprise.context.ApplicationScoped
@@ -12,17 +12,25 @@ internal class QuestionService {
     @Inject @field:Default lateinit var questionRepository: QuestionRepository
     @Inject @field:Default lateinit var interviewService: InterviewService
 
-    fun get(questionId: Long): Uni<QuestionResponse> = questionRepository
-        .findById(questionId)
-        .map {
-            if (it == null) {
-                throw QuestionNotFoundException("Question with id $questionId not found")
-            } else {
-                QuestionResponse.build(it)
+    fun get(questionId: Long): Uni<Question> = questionRepository.getQuestion(questionId)
+
+    fun addAnswer(questionId: Long, answer: Answer): Uni<Question> {
+        return questionRepository
+            .getQuestion(questionId)
+            .map {
+                it.answers.add(answer)
+                questionRepository.persistQuestion(it)
+                it
             }
+    }
+
+    fun create(createRequest: QuestionCreateRequest): Uni<Question> = createRequest
+        .toEntity(null)
+        .run {
+            questionRepository.persistQuestion(this)
         }
 
-    fun create(createRequest: QuestionCreateRequest, interviewId: Long, clientId: Long?): Uni<QuestionResponse> = createRequest
+    fun create(createRequest: QuestionCreateRequest, interviewId: Long, clientId: Long?): Uni<Question> = createRequest
         .toEntity(clientId)
         .run {
             interviewService
@@ -35,17 +43,10 @@ internal class QuestionService {
                         maxTime = this.maxTime,
                         clientId = this.clientId,
                         interviews = mutableListOf(it),
+                        answers = mutableSetOf(),
+//                        answers = mutableListOf(),
                     )
                     questionRepository.persistQuestion(question)
                 }
-                .map {
-                    QuestionResponse.build(it)
-                }
-//            questionRepository
-//                .persistQuestion(this)
-//                .chain { it -> interviewService.addQuestion(interviewId, it) }
-//                .map {
-//                    QuestionResponse.build(this)
-//                }
         }
 }

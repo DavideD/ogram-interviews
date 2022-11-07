@@ -1,16 +1,22 @@
 package co.ogram.security
 
-import javax.annotation.Priority
-import javax.enterprise.context.ApplicationScoped
-import javax.enterprise.inject.Alternative
 import io.smallrye.jwt.auth.principal.*
+import org.jose4j.jwa.AlgorithmConstraints
+import org.jose4j.jws.AlgorithmIdentifiers
+import org.jose4j.jws.JsonWebSignature
 import org.jose4j.jwt.JwtClaims
 import org.jose4j.jwt.consumer.InvalidJwtException
 import java.nio.charset.StandardCharsets
 import java.util.*
+import javax.annotation.Priority
+import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
+import javax.enterprise.context.ApplicationScoped
+import javax.enterprise.inject.Alternative
 import javax.ws.rs.ForbiddenException
-import kotlin.collections.ArrayList
 
+
+// "eVJ0MTFBMTNpU3FMTDBndWJzN3p6UzY4RHZ5OUxYUjBmWUxnUGNOSUdLaEtBQUxnZnFFS2NtZE50ZGxXTjBaeQ"
 @ApplicationScoped
 @Alternative
 @Priority(1)

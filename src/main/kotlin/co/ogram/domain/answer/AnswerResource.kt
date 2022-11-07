@@ -30,7 +30,7 @@ internal class AnswerResource {
     ): Uni<Response> {
         val spId = sec.userPrincipal.name.toLong()
         return this.answerService.create(answer, spId).map {
-            Response.status(Response.Status.CREATED).entity(it).build()
+            Response.status(Response.Status.CREATED).entity(AnswerResponse.build(it)).build()
         }
     }
 }

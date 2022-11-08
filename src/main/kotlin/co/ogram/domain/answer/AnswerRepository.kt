@@ -3,8 +3,10 @@ package co.ogram.domain.answer
 import co.ogram.domain.exception.AnswerNotFoundException
 import io.quarkus.hibernate.reactive.panache.Panache
 import io.quarkus.hibernate.reactive.panache.PanacheRepository
+import io.quarkus.panache.common.Parameters
 import javax.enterprise.context.ApplicationScoped
 import io.smallrye.mutiny.Uni
+import org.hibernate.reactive.mutiny.Mutiny
 
 @ApplicationScoped
 internal class AnswerRepository : PanacheRepository<Answer> {
@@ -13,6 +15,17 @@ internal class AnswerRepository : PanacheRepository<Answer> {
             .map {
                 it ?: throw AnswerNotFoundException("Answer with id $answerId not found")
             }
+        // or:
+//        return find("from answer a left join fetch a.question where a.id = :id", Parameters.with("id", answerId))
+//            .firstResult()
+        // or:
+//        return findById(answerId)
+//            .call { answer ->
+//                Mutiny.fetch(answer.question)
+//            } ?: throw AnswerNotFoundException("Answer with id $answerId not found")
+//            .map {
+//                it ?: throw AnswerNotFoundException("Answer with id $answerId not found")
+//            }
     }
 
     fun persistAnswer(answer: Answer): Uni<Answer> {

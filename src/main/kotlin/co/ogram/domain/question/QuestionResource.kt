@@ -36,7 +36,7 @@ internal class QuestionResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Operation(summary = "creates a question in the database")
-    @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
+//    @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
     fun createQuestion(
         @Valid @NotNull(message = "Question's data is required") question: QuestionCreateRequest,
     ): Uni<Response> {
@@ -48,14 +48,14 @@ internal class QuestionResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Operation(summary = "creates a question in the database for given interview and client")
-    @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
+//    @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
     @Path("/{interviewId}")
     fun createQuestion(
         @PathParam("interviewId") interviewId: Long,
         @Valid @NotNull(message = "Question's data is required") question: QuestionCreateRequest,
-        @Context sec: SecurityContext,
+//        @Context sec: SecurityContext,
     ): Uni<Response> {
-        val clientId = sec.userPrincipal.name.toLong()
+        val clientId = 1L // sec.userPrincipal.name.toLong()
         return this.questionService.create(question, interviewId, clientId).map {
             Response.status(Response.Status.CREATED).entity(QuestionResponse.build(it)).build()
         }

@@ -40,12 +40,12 @@ internal class InterviewResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Operation(summary = "creates an interview with questions in the database")
-    @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
+//    @RolesAllowed("CLIENT_OWNER", "CLIENT_ADMIN", "CLIENT_MANAGER")
     fun createInterview(
         @Valid @NotNull(message = "Interview's data is required") interview: InterviewCreateRequest,
-        @Context sec: SecurityContext,
+//        @Context sec: SecurityContext,
     ): Uni<Response> {
-        val clientId = sec.userPrincipal.name.toLong()
+        val clientId = 1L // sec.userPrincipal.name.toLong()
         return this.interviewService.create(interview, clientId).map {
             Response.status(Response.Status.CREATED).entity(InterviewResponse.build((it))).build()
         }

@@ -31,12 +31,12 @@ internal class AnswerResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Operation(summary = "creates answer for question in the database")
-    @RolesAllowed("SP")
+//    @RolesAllowed("SP")
     fun createAnswer(
         @Valid @NotNull(message = "Answer's data is required") answer: AnswerCreateRequest,
-        @Context sec: SecurityContext,
+//        @Context sec: SecurityContext,
     ): Uni<Response> {
-        val spId = sec.userPrincipal.name.toLong()
+        val spId = 1L // sec.userPrincipal.name.toLong()
         return this.answerService.create(answer, spId).map {
             Response.status(Response.Status.CREATED).entity(AnswerResponse.build(it)).build()
         }

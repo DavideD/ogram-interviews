@@ -11,12 +11,9 @@ import co.ogram.infrastructure.database.Table.QUESTION_TABLE
 import co.ogram.infrastructure.database.Table.INTERVIEW_QUESTION_TABLE
 import co.ogram.domain.answer.Answer
 import co.ogram.domain.interview.Interview
-import co.ogram.infrastructure.database.Table
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
-import org.hibernate.annotations.Formula
 
 @Entity(name = QUESTION_TABLE)
 @RegisterForReflection

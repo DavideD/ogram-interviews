@@ -1,3 +1,3 @@
 package co.ogram.domain.exception
 
-internal class QuestionNotFoundException(val name: String) : RuntimeException()
+internal class QuestionNotFoundException(name: String) : NotFoundException(name)

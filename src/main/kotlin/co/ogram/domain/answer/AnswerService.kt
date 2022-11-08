@@ -12,16 +12,21 @@ internal class AnswerService {
     @Inject
     @field:Default
     lateinit var answerRepository: AnswerRepository
+
     @Inject
     @field:Default
     lateinit var questionService: QuestionService
+
+    fun get(answerId: Long): Uni<Answer> {
+        return answerRepository.getAnswer(answerId)
+    }
 
     fun create(createRequest: AnswerCreateRequest, spId: Long): Uni<Answer> {
         return createRequest
             .toEntity(spId, fileURL = "http://www.a-url.com/mock")
             .run {
                 questionService
-                    .addAnswer(this.questionId, this)
+                    .addAnswer(this.questionId as Long, this)
                     .chain { it ->
                         val answer = Answer(
                             answerId = this.answerId,

@@ -44,7 +44,6 @@ internal class QuestionService {
                         clientId = this.clientId,
                         interviews = mutableListOf(it),
                         answers = mutableSetOf(),
-//                        answers = mutableListOf(),
                     )
                     questionRepository.persistQuestion(question)
                 }

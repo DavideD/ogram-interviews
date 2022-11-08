@@ -43,7 +43,6 @@ internal data class Question (
         @field:OnDelete(action = CASCADE)
         @field:Fetch(FetchMode.JOIN)
         val answers: MutableSet<Answer> = mutableSetOf(),
-//        val answers: MutableList<Answer> = mutableListOf(),
 
         @field:ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
         @field:JoinTable(

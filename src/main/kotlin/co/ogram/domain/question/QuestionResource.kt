@@ -15,6 +15,7 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.PathParam
 import javax.ws.rs.core.Response
 import org.eclipse.microprofile.openapi.annotations.Operation
+import javax.transaction.Transactional
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.SecurityContext
 

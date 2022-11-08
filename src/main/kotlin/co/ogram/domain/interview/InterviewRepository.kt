@@ -18,20 +18,20 @@ internal class InterviewRepository : PanacheRepository<Interview> {
     }
 
     fun getInterview(interviewId: Long): Uni<Interview> {
-        return find(
-            "from interview i left join fetch i.questions where i.id = :id",
-            Parameters.with("id", interviewId)
-        ).firstResult() ?: throw InterviewNotFoundException("Interview with id $interviewId not found")
+        return findById(interviewId)
+            .map {
+                it ?: throw InterviewNotFoundException("Interview with id $interviewId not found")
+            }
+        // or:
+//        return find(
+//            "from interview i left join fetch i.questions where i.id = :id",
+//            Parameters.with("id", interviewId)
+//        ).firstResult() ?: throw InterviewNotFoundException("Interview with id $interviewId not found")
         // or:
 //        return findById(interviewId)
 //            .call { interview ->
 //                Mutiny.fetch(interview.questions)
 //            } ?: throw InterviewNotFoundException("Interview with id $interviewId not found")
-        // or:
-//        return findById(interviewId)
-//            .map {
-//                it ?: throw InterviewNotFoundException("Interview with id $interviewId not found")
-//            }
     }
 
     fun getInterviewQuestions(interviewId: Long): Uni<MutableSet<Question>> {

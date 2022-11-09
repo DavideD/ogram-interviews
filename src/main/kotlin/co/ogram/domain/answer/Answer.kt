@@ -1,5 +1,6 @@
 package co.ogram.domain.answer
 
+import co.ogram.domain.interview.Interview
 import io.quarkus.runtime.annotations.RegisterForReflection
 import javax.persistence.*
 import co.ogram.domain.question.Question
@@ -47,5 +48,9 @@ internal data class Answer (
         updatable = false,
     )
     @field:JsonIgnore
-    val question: Question = Question(),
-)
+    var question: Question = Question(),
+) {
+    override fun toString(): String {
+        return Answer::class.java.simpleName + ":" + answerId
+    }
+}

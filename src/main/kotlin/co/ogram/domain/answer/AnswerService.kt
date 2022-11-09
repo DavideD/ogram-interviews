@@ -25,21 +25,15 @@ internal class AnswerService {
         return createRequest
             .toEntity(spId, fileURL = "http://www.a-url.com/mock")
             .run {
-                questionService
-                    .addAnswer(this.questionId as Long, this)
-                    .chain { it ->
-                        val answer = Answer(
-                            answerId = this.answerId,
-                            questionId = this.questionId,
-                            spId = this.spId,
-                            answerTime = this.answerTime,
-                            fileURL = this.fileURL,
-                            retakeCount = this.retakeCount,
-                            totalTime = this.totalTime,
-                            question = it,
-                        )
-                        answerRepository.persistAnswer(answer)
-                    }
+                val answer = Answer(
+                    answerId = this.answerId,
+                    spId = this.spId,
+                    answerTime = this.answerTime,
+                    fileURL = this.fileURL,
+                    retakeCount = this.retakeCount,
+                    totalTime = this.totalTime
+                )
+                answerRepository.persistAnswer(answer, questionId)
             }
     }
 }

@@ -3,6 +3,7 @@ package co.ogram.domain.question
 import co.ogram.domain.answer.Answer
 import co.ogram.domain.interview.InterviewService
 import io.smallrye.mutiny.Uni
+import org.hibernate.reactive.mutiny.Mutiny
 import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Default
 import javax.inject.Inject
@@ -17,11 +18,8 @@ internal class QuestionService {
     fun addAnswer(questionId: Long, answer: Answer): Uni<Question> {
         return questionRepository
             .getQuestion(questionId)
-            .map {
-                it.answers.add(answer)
-                questionRepository.persistQuestion(it)
-                it
-            }
+            .call { q -> Mutiny.fetch(q.answers) }
+            .invoke { q -> q.addAnswers(answer) }
     }
 
     fun create(createRequest: QuestionCreateRequest): Uni<Question> = createRequest
@@ -34,7 +32,7 @@ internal class QuestionService {
         .toEntity(clientId)
         .run {
             interviewService
-                .addQuestion(interviewId, this)
+                .getInterview(interviewId)
                 .chain { it ->
                     val question = Question(
                         questionId = this.questionId,
@@ -42,9 +40,9 @@ internal class QuestionService {
                         description = this.description,
                         maxTime = this.maxTime,
                         clientId = this.clientId,
-                        interviews = mutableListOf(it),
                         answers = mutableSetOf(),
                     )
+                    question.addInterview(it)
                     questionRepository.persistQuestion(question)
                 }
         }

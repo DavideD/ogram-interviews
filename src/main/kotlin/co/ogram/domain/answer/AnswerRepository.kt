@@ -1,6 +1,7 @@
 package co.ogram.domain.answer
 
 import co.ogram.domain.exception.AnswerNotFoundException
+import co.ogram.domain.question.Question
 import io.quarkus.hibernate.reactive.panache.Panache
 import io.quarkus.hibernate.reactive.panache.PanacheRepository
 import io.quarkus.panache.common.Parameters
@@ -31,6 +32,16 @@ internal class AnswerRepository : PanacheRepository<Answer> {
     fun persistAnswer(answer: Answer): Uni<Answer> {
         return Panache.withTransaction {
             persist(answer)
+        }
+    }
+
+    fun persistAnswer(answer: Answer, questionId: Long): Uni<Answer> {
+        return Panache.withTransaction {
+            session.chain{ s ->
+                    val question = s.getReference(Question::class.java, questionId)
+                    answer.question = question;
+                    persist(answer)
+                }
         }
     }
 }

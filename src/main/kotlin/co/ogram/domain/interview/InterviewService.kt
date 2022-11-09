@@ -6,20 +6,13 @@ import javax.enterprise.inject.Default
 import javax.inject.Inject
 
 import co.ogram.domain.question.Question
+import co.ogram.domain.question.QuestionRepository
+import org.hibernate.reactive.mutiny.Mutiny
 
 @ApplicationScoped
 internal class InterviewService {
     @Inject @field:Default lateinit var interviewRepository: InterviewRepository
-
-    fun addQuestion(interviewId: Long, question: Question): Uni<Interview> {
-        return interviewRepository
-            .getInterview(interviewId)
-            .map {
-                it.questions.add(question)
-                interviewRepository.persistInterview(it)
-                it
-            }
-    }
+    @Inject @field:Default lateinit var questionRepository: QuestionRepository
 
     fun getInterview(interviewId: Long): Uni<Interview> {
         return interviewRepository.getInterview(interviewId)

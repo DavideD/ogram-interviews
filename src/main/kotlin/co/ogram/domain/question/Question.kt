@@ -50,4 +50,18 @@ internal data class Question (
         @field:Fetch(FetchMode.JOIN)
         @field:JsonIgnore
         val interviews: MutableList<Interview> = mutableListOf(),
-)
+) {
+        fun addInterview(interview: Interview) {
+                interviews.add(interview)
+                interview.questions.add(this)
+        }
+
+        fun addAnswers(answer: Answer) {
+                answers.add(answer)
+                answer.question = this
+        }
+
+        override fun toString(): String {
+                return Question::class.java.simpleName + ":" + questionId
+        }
+}

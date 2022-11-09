@@ -6,11 +6,13 @@ import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.Test
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.Order
 
 @QuarkusTest
 class InterviewResourceTest {
 
     @Test
+    @Order(1)
     fun testCreateInterview() {
         given()
             .contentType(ContentType.JSON)
@@ -22,6 +24,7 @@ class InterviewResourceTest {
     }
 
     @Test
+    @Order(2)
     fun testGetExistingInterview() {
         given()
             .contentType(ContentType.JSON)
@@ -39,6 +42,7 @@ class InterviewResourceTest {
     }
 
     @Test
+    @Order(3)
     fun testGetExistingInterviewWithQuestions() {
         given()
             .contentType(ContentType.JSON)
@@ -67,6 +71,7 @@ class InterviewResourceTest {
     }
 
     @Test
+    @Order(4)
     fun testGetExistingInterviewWithQuestionsAndAnswers() {
         given()
             .contentType(ContentType.JSON)
@@ -97,7 +102,8 @@ class InterviewResourceTest {
             .body("jobId", equalTo(1))
             .body("clientId", equalTo(1))
             .body("retakeLimit", equalTo(3))
-            .body("questions.size()", equalTo(1))
+            // Because tables aren't deleted, thre is still a question created by the previous test
+            .body("questions.size()", equalTo(2))
     }
 
     // Helpers:
